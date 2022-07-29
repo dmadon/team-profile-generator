@@ -15,12 +15,14 @@ const promptUser = ()=>{
         .then(({teamName})=>{
             const team = new Team(teamName);
             
-            team.addManager()
-            .then((managerInfo)=>{console.log(team.manager)});
-        });
-
+            return team.addManager()
+            // .then((managerInfo)=>{console.log(team.manager)});
+            .then(team.addMembers);
             
-        };
+        })
+};
+
+
                 
 
 
