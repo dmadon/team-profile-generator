@@ -126,14 +126,33 @@ const addMembers = (teamData)=>{
         }
         ])
         .then((memberInfo)=>{
-            teamData.members.push(memberInfo);
-            if(memberInfo.confirmAddMember){
-                return addMembers(teamData);
+            if(memberInfo.memberRole === 'Engineer'){
+                const engineer = new Engineer(memberInfo.memberName,memberInfo.memberId,memberInfo.memberEmail,memberInfo.github);
+                engineer.role=engineer.getRole();
+                teamData.members.push(engineer);
+                if(memberInfo.confirmAddMember){
+                    return addMembers(teamData);
+                }
+                else{
+                    // console.log(teamData);
+                    return teamData;
+                };
+            }
+            else if(memberInfo.memberRole === 'Intern'){
+                const intern = new Intern(memberInfo.memberName,memberInfo.memberId,memberInfo.memberEmail,memberInfo.school);
+                intern.role=intern.getRole();
+                teamData.members.push(intern);
+                if(memberInfo.confirmAddMember){
+                    return addMembers(teamData);
+                }
+                else{
+                    // console.log(teamData);
+                    return teamData;
+                };
             }
             else{
-                // console.log(teamData);
                 return teamData;
-            };
+            }
         });
 };
 
