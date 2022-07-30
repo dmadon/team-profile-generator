@@ -1,4 +1,5 @@
 const inquirer = require("inquirer");
+const generateTemplate = require('./src/page-template');
 const Employee = require("./lib/Employee");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
@@ -76,7 +77,7 @@ const addMembers = (teamData)=>{
    Enter New Team Member
 --------------------------`);
     
-    console.log(teamData)
+    // console.log(teamData)
 
     return inquirer
         .prompt([
@@ -84,22 +85,25 @@ const addMembers = (teamData)=>{
             type: 'list',
             name: 'memberRole',
             message: "What is your team member's role?",
-            choices: ['Engineer','Intern','I am finished adding team members']
+            choices: ['Engineer','Intern','I am finished adding team members'],       
         },
         {
             type: 'input',
             name: 'memberName',
-            message: "Please enter team member's name."
+            message: "Please enter team member's name.",
+            when: answers => answers.memberRole !== 'I am finished adding team members'
         },
         {
             type: 'input',
             name: 'memberId',
-            message: "Please enter team member's ID."
+            message: "Please enter team member's ID.",
+            when: answers => answers.memberRole !== 'I am finished adding team members'
         },
         {
             type:'input',
             name: 'memberEmail',
-            message: "Please enter team member's email address."
+            message: "Please enter team member's email address.",
+            when: answers => answers.memberRole !== 'I am finished adding team members'
         },
         {
             type:'input',
@@ -117,7 +121,8 @@ const addMembers = (teamData)=>{
             type: 'confirm',
             name: 'confirmAddMember',
             message: 'Would you like to add another team member?',
-            default: false
+            default: false,
+            when: answers => answers.memberRole !== 'I am finished adding team members'
         }
         ])
         .then((memberInfo)=>{
@@ -126,6 +131,7 @@ const addMembers = (teamData)=>{
                 return addMembers(teamData);
             }
             else{
+                // console.log(teamData);
                 return teamData;
             };
         });
@@ -137,4 +143,7 @@ const addMembers = (teamData)=>{
 promptUser()
 .then(addManager)
 .then(addMembers)
+.then(teamData=>{
+    generateTemplate(teamData)
+})
 
