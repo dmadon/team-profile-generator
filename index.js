@@ -15,57 +15,126 @@ const promptUser = ()=>{
         .then(({teamName})=>{
             const team = new Team(teamName);
             
-            return team.addManager()
+            // return team.addManager()
             // .then((managerInfo)=>{console.log(team.manager)});
-            .then(team.addMembers);
+            // .then(team.addMembers);
             
         })
 };
 
 
-                
+const addManager = ()=>{
+    console.log(`
+--------------------------
+Enter Manager Information
+--------------------------`);
+
+    return inquirer
+        .prompt([
+        {
+            type: 'input',
+            name: 'managerName',
+            message: "Please enter the team manager's name.",
+        },
+        {
+            type: 'input',
+            name: 'managerId',
+            message: "Please enter the team manager's ID number."
+        },
+        {
+            type: 'input',
+            name: 'managerEmail',
+            message: "Please enter the team manager's email address."
+        },
+        {
+            type:'input',
+            name: 'officeNum',
+            message: "Please enter the team manager's office number."
+        }
+        ])// end of manager info questions
+        
+        .then((managerInfo)=>{
+            const {managerName,managerId,managerEmail,officeNum}=managerInfo;
+            const manager = new Manager(managerName,managerId,managerEmail,officeNum);
+            manager.role = (manager.getRole());
+          
+            return manager;
+            
+        });// end create new manager object
+};// end addManager function
 
 
 
+const addMembers = (teamData)=>{
 
-// const teamInfo = (managerInfo)=>{
+    if(!teamData.members){
+        teamData.members = [];
+    }
+
+    console.log(`
+--------------------------
+   Enter New Team Member
+--------------------------`);
     
-//     return inquirer
-//         .prompt([
-//         {
-//             type: 'list',
-//             name: 'memberRole',
-//             message: "What is your team member's role?",
-//             choices: ['Engineer','Intern','I am finished adding team members']
-//         },
-//         {
-//             type: 'input',
-//             name: 'memberName',
-//             message: "Please enter team member's name."
-//         },
-//         {
-//             type: 'input',
-//             name: 'memberId',
-//             message: "Please enter team member's ID."
-//         },
-//         {
-//             type:'input',
-//             name: 'memberEmail',
-//             message: "Please enter team member's email address."
-//         }
-//         ])
-//         .then((memberInfo)=>{
-//             console.log(managerInfo);
-//             console.log(memberInfo);
-//         })
-// };
+    console.log(teamData)
+
+    return inquirer
+        .prompt([
+        {
+            type: 'list',
+            name: 'memberRole',
+            message: "What is your team member's role?",
+            choices: ['Engineer','Intern','I am finished adding team members']
+        },
+        {
+            type: 'input',
+            name: 'memberName',
+            message: "Please enter team member's name."
+        },
+        {
+            type: 'input',
+            name: 'memberId',
+            message: "Please enter team member's ID."
+        },
+        {
+            type:'input',
+            name: 'memberEmail',
+            message: "Please enter team member's email address."
+        },
+        {
+            type:'input',
+            name: 'github',
+            message: "Please enter team member's github username.",
+            when: (answers)=>answers.memberRole === 'Engineer'
+        },
+        {
+            type: 'input',
+            name: 'school',
+            message: "Please enter team member's school.",
+            when: (answers)=>answers.memberRole === 'Intern'
+        },
+        {
+            type: 'confirm',
+            name: 'confirmAddMember',
+            message: 'Would you like to add another team member?',
+            default: false
+        }
+        ])
+        .then((memberInfo)=>{
+            teamData.members.push(memberInfo);
+            if(memberInfo.confirmAddMember){
+                return addMembers(teamData);
+            }
+            else{
+                return teamData;
+            };
+        });
+};
 
 
 
 
 promptUser()
-
-
-    
-    
+.then(addManager)
+.then(addMembers)
 
