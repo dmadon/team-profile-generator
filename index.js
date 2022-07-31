@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const generateTemplate = require('./src/page-template');
+const {writeFile, copyFile} = require('./utils/generate-site');
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const Manager = require("./lib/Manager");
@@ -161,7 +162,20 @@ const addMembers = (teamData)=>{
 promptUser()
 .then(addManager)
 .then(addMembers)
-.then(teamData=>{
-    generateTemplate(teamData)
+.then(teamData => {
+    return generateTemplate(teamData);
 })
+.then(content => {
+    return writeFile(content);
+})
+.then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+})
+.then(copyFileResponse => {
+    console.log(copyFileResponse);
+})
+.catch(err => {
+    console.log(err);
+});
 
