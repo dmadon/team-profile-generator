@@ -41,5 +41,11 @@
 
   ![image](https://user-images.githubusercontent.com/99852346/182048818-2d66cbe7-719e-4a4a-b4d1-9ba9f9f0f8d9.png)
 
+  ## Links
+  View a walkthrough video of the team profile generator in action: https://drive.google.com/file/d/17dUlazyo3VPZEUH6BvKumkugBypza4py/view?usp=sharing
+
+  View the repository: https://github.com/dmadon/team-profile-generator
+
+ 
   
   
