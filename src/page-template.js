@@ -2,33 +2,31 @@
 
 // generate engineer cards
 const generateEngineerCards = members=>{
-
-    for(let i = 0; i<members.length; i++){
-
-        if(members[i].role === "Engineer"){
-
-            return`
-                
+    return`
+        ${members
+            .filter(({role}) => role==="Engineer")    
+            .map(({name, id, email, github, role}) => {
+                return`
                 <div class="col-12 col-md-6 col-lg-3 mb-3 ">
-                    <div class="card shadow h-100">
+                            <div class="card shadow h-100">
 
-                        <div class="card-header bg-warning">
-                            <h5 class="card-title">${members[i].name}</h5>
-                            <h6 class="card-subtitle mb-2 ">${members[i].role}</h6>
-                        </div>
+                                <div class="card-header bg-warning">
+                                    <h5 class="card-title">${name}</h5>
+                                    <h6 class="card-subtitle mb-2 "><i class="fa-solid fa-user-gear"></i> ${role}</h6>
+                                </div>
 
-                        <div class="card-body">                    
-                            <p class="card-text">ID: ${members[i].id}</p>
-                            <p class="card-text">Email: <a href="mailto:${members[i].email}" class="card-link">${members[i].email}</a></p>
-                            <p class="card-text">GitHub: <a href="https://github.com/${members[i].github}" class="card-link">${members[i].github}</a></p>
+                                <div class="card-body">                    
+                                    <p class="card-text">ID: ${id}</p>
+                                    <p class="card-text">Email: <a href="mailto:${email}" class="card-link">${email}</a></p>
+                                    <p class="card-text">GitHub: <a href="https://github.com/${github}" class="card-link">${github}</a></p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-            `
+                `;
+            })
+            .join('')
         }
-
-    }
+    `;
 };
 
 
@@ -36,42 +34,37 @@ const generateEngineerCards = members=>{
 
 // generate intern cards
 const generateInternCards = members=>{
+    return`
+        ${members
+            .filter(({role}) => role==="Intern")    
+            .map(({name, id, email, school, role}) => {
+                return`
+                    <div class="col-12 col-md-6 col-lg-3 mb-3 ">
+                        <div class="card shadow h-100">
 
-    for(let i = 0; i<members.length; i++){
+                            <div class="card-header bg-secondary">
+                                <h5 class="card-title">${name}</h5>
+                                <h6 class="card-subtitle mb-2 "><i class="fa-solid fa-user-graduate"></i> ${role}</h6>
+                            </div>
 
-        if(members[i].role === "Intern"){
-
-            return`
-                <div class="col-12 col-md-6 col-lg-3 mb-3 ">
-                    <div class="card shadow h-100">
-
-                        <div class="card-header bg-secondary">
-                            <h5 class="card-title">${members[i].name}</h5>
-                            <h6 class="card-subtitle mb-2 ">${members[i].role}</h6>
+                            <div class="card-body">                    
+                                <p class="card-text">ID: ${id}</p>
+                                <p class="card-text">Email: <a href="mailto:${email}" class="card-link">${email}</a></p>
+                                <p class="card-text">School: ${school}</p>
+                            </div>
                         </div>
-
-                        <div class="card-body">                    
-                            <p class="card-text">ID: ${members[i].id}</p>
-                            <p class="card-text">Email: <a href="mailto:${members[i].email}" class="card-link">${members[i].email}</a></p>
-                            <p class="card-text">School: ${members[i].school}</p>
-                        </div>
-                    </div>
-                </div>   
-            `
-        };
-    };
+                    </div>   
+                `
+            })
+            .join('')
+        }
+    `;
 };
-
-
-
-
-
 
 
 // export function that generates the whole page
 module.exports = teamData => {
 const {members,...manager} = teamData;
-
 
 return`
 <!DOCTYPE html>
@@ -91,7 +84,7 @@ return`
 <body>
 
     <header class="container-fluid bg-dark text-white text-center p-3">
-        <h1>My Team</h1>
+        <h1>${manager.teamName}</h1>
     </header>
 
     <main class="container-fluid p-3">
@@ -102,7 +95,7 @@ return`
                 <div class="card shadow h-100">
                     <div class="card-header bg-danger">
                         <h5 class="card-title">${manager.name}</h5>
-                        <h6 class="card-subtitle mb-2 ">${manager.role}</h6>
+                        <h6 class="card-subtitle mb-2 "><i class="fa-solid fa-bullhorn"></i> ${manager.role}</h6>
                     </div>
 
                     <div class="card-body">
